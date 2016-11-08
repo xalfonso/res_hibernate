@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="eas.com.entity.Author" table="author">
+        <id name="id" type="java.lang.Long">
+            <column name="id"/>
+            <generator class="increment"/>
+        </id>
+        <property name="firstName">
+            <column name="firstname"/>
+        </property>
+        <property name="secondName">
+            <column name="secondname"/>
+        </property>
+        <property name="firstSurname">
+            <column name="firstsurname"/>
+        </property>
+        <property name="secondSurname">
+            <column name="secondsurname"/>
+        </property>
+    </class>
+</hibernate-mapping>
