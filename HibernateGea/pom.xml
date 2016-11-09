@@ -7,12 +7,14 @@
     <groupId>eas.com</groupId>
     <artifactId>hibernate-gea</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <description>Tips: Entity mapping by xml, CRUD Dao with Generic, use of Scanner for console. Maven compiler-plugin, Maven jar-plugin, Maven dependency-plugin </description>
+    <description>Tips: Entity mapping by xml, CRUD Dao with Generic, use of Scanner for console. JPQL Query
+    Maven compiler-plugin, Maven jar-plugin, Maven dependency-plugin </description>
 
 
     <properties>
         <jdk.version>1.8</jdk.version>
         <hibernate.version>5.2.2.Final</hibernate.version>
+        <log4j.version>1.2.17</log4j.version>
         <mysql.version>5.1.19</mysql.version>
         <maven-jar.version>3.0.2</maven-jar.version>
         <maven-dependency.version>2.10</maven-dependency.version>
@@ -30,20 +32,34 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/log4j/log4j No obligatory, it is for configuring the hibernate log-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
     </dependencies>
 
 
 
     <build>
         <plugins>
+            <!-- Plugin for compiling with specific jdk -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
             <!-- Plugin for generating the jar file -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${maven-jar.version}</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${java.version}</target>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -69,15 +85,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Plugin for compiling with specific jdk -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

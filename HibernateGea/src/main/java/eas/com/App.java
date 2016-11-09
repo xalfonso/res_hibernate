@@ -28,6 +28,9 @@ public class App {
                 System.out.println("3. Update Author");
                 System.out.println("4. Delete Author");
                 System.out.println("5. List of Author");
+                System.out.println("6. List of Author Like First Surname");
+                System.out.println("7. Change Surname");
+                System.out.println("8. Delete Author by First Name");
                 int menu = scanner.nextInt();
 
 
@@ -47,6 +50,15 @@ public class App {
                     case 5:
                         listOption();
                         break;
+                    case 6:
+                        listLikeSurnameOption();
+                        break;
+                    case 7:
+                        changeSecondSurnameOption();
+                        break;
+                    case 8:
+                        deleteAuthorByFirstNameOption();
+                        break;
                     default:
                         System.out.println("Option invalid");
                 }
@@ -65,7 +77,7 @@ public class App {
     }
 
 
-    public static void listOption() throws Exception {
+    private static void listOption() throws Exception {
         System.out.println("List of Authors");
         List<Author> authors = authorDao.getAll();
         for (Author author : authors) {
@@ -74,85 +86,136 @@ public class App {
 
     }
 
-    public static void updateOption() throws Exception {
-        Author author = getOption();
-        Scanner scanner = new Scanner(System.in);
+    private static void listLikeSurnameOption() throws Exception {
 
-        System.out.print("Write the first name (update): ");
-        String firstName = scanner.nextLine();
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        System.out.print("Write the second name (update): ");
-        String secondName = scanner.nextLine();
+            System.out.println("List of Authors like surname");
+            System.out.print("Write the first surname (for like): ");
+            String firstSurname = scanner.nextLine();
 
-        System.out.print("Write the first surname (update): ");
-        String firstSurname = scanner.nextLine();
+            List<Author> authors = authorDao.getLikeFirstSurname(firstSurname);
+            for (Author author : authors) {
+                System.out.println(author.toString());
+            }
+        }
 
-        System.out.print("Write the second surname (update): ");
-        String secondSurname = scanner.nextLine();
-
-        author.setFirstName(firstName)
-                .setSecondName(secondName)
-                .setFirstSurname(firstSurname)
-                .setSecondSurname(secondSurname);
-
-        authorDao.update(author);
-
-        System.out.println("Author updated successfully");
     }
 
 
-    public static void deleteOption() throws Exception {
-        Author author = getOption();
-        Scanner scanner = new Scanner(System.in);
+    private static void changeSecondSurnameOption() throws Exception {
 
-        System.out.println("Are you sure of delete this author (y/n)");
-        String opt = scanner.nextLine().toUpperCase();
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Write the second surname (to find): ");
+            String oldSecondSurname = scanner.nextLine();
 
-        switch (opt) {
-            case "Y":
-                System.out.println("Delete option selected");
-                authorDao.delete(author.getId());
-                break;
-            case "N":
-                System.out.println("Operation cancelled");
-                break;
-            default:
-                System.out.println("Incorrect option");
+            System.out.print("Write the second surname (to update): ");
+            String newSecondSurname = scanner.nextLine();
+
+            if(authorDao.changeSecondSurname(newSecondSurname, oldSecondSurname)){
+                System.out.println("Author second surname was  updated successfully");
+            }else {
+                System.out.println("The update was not made");
+            }
         }
     }
 
-    public static Author getOption() throws Exception {
-        Scanner scanner = new Scanner(System.in);
+    private static void deleteAuthorByFirstNameOption() throws Exception {
 
-        System.out.print("Write the id of author ");
-        long id = scanner.nextLong();
-        Author author = authorDao.get(id);
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Write the first name : ");
+            String firstName = scanner.nextLine();
 
-        System.out.println("Data Author");
-        System.out.println(author.toString());
+            if(authorDao.deleteAuthorByFirstName(firstName)){
+                System.out.println("Author was deleted successfully");
+            }else {
+                System.out.println("The deleting was not made");
+            }
+        }
+    }
 
-        return author;
+    private static void updateOption() throws Exception {
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            Author author = getOption();
+            System.out.print("Write the first name (update): ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("Write the second name (update): ");
+            String secondName = scanner.nextLine();
+
+            System.out.print("Write the first surname (update): ");
+            String firstSurname = scanner.nextLine();
+
+            System.out.print("Write the second surname (update): ");
+            String secondSurname = scanner.nextLine();
+
+            author.setFirstName(firstName)
+                    .setSecondName(secondName)
+                    .setFirstSurname(firstSurname)
+                    .setSecondSurname(secondSurname);
+
+            authorDao.update(author);
+
+            System.out.println("Author updated successfully");
+        }
     }
 
 
-    public static void insertOption() throws Exception {
-        System.out.println("Insert option selected");
+    private static void deleteOption() throws Exception {
+        try (Scanner scanner = new Scanner(System.in)) {
+            Author author = getOption();
 
-        Scanner scanner = new Scanner(System.in);
+            System.out.println("Are you sure of delete this author (y/n)");
+            String opt = scanner.nextLine().toUpperCase();
 
-        System.out.print("Write the first name: ");
-        String firstName = scanner.nextLine();
+            switch (opt) {
+                case "Y":
+                    System.out.println("Delete option selected");
+                    authorDao.delete(author.getId());
+                    break;
+                case "N":
+                    System.out.println("Operation cancelled");
+                    break;
+                default:
+                    System.out.println("Incorrect option");
+            }
+        }
+    }
 
-        System.out.print("Write the second name: ");
-        String secondName = scanner.nextLine();
+    private static Author getOption() throws Exception {
+        try (Scanner scanner = new Scanner(System.in);) {
+            System.out.print("Write the id of author ");
+            long id = scanner.nextLong();
+            Author author = authorDao.get(id);
 
-        System.out.print("Write the first surname: ");
-        String firstSurname = scanner.nextLine();
+            System.out.println("Data Author");
+            System.out.println(author.toString());
 
-        System.out.print("Write the second surname: ");
-        String secondSurname = scanner.nextLine();
+            return author;
+        }
+    }
 
-        Author author = new Author(firstName, secondName, firstSurname, secondSurname);
-        authorDao.insert(author);
+
+    private static void insertOption() throws Exception {
+
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Insert option selected");
+            System.out.print("Write the first name: ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("Write the second name: ");
+            String secondName = scanner.nextLine();
+
+            System.out.print("Write the first surname: ");
+            String firstSurname = scanner.nextLine();
+
+            System.out.print("Write the second surname: ");
+            String secondSurname = scanner.nextLine();
+
+            Author author = new Author(firstName, secondName, firstSurname, secondSurname);
+            authorDao.insert(author);
+        }
     }
 }
