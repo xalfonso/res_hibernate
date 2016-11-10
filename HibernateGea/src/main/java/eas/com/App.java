@@ -31,6 +31,7 @@ public class App {
                 System.out.println("6. List of Author Like First Surname");
                 System.out.println("7. Change Surname");
                 System.out.println("8. Delete Author by First Name");
+                System.out.println("9. List of Author by First Name and First Surname");
                 int menu = scanner.nextInt();
 
 
@@ -58,6 +59,9 @@ public class App {
                         break;
                     case 8:
                         deleteAuthorByFirstNameOption();
+                        break;
+                    case 9:
+                        listByFirstNameFirstSurnameOption();
                         break;
                     default:
                         System.out.println("Option invalid");
@@ -95,6 +99,25 @@ public class App {
             String firstSurname = scanner.nextLine();
 
             List<Author> authors = authorDao.getLikeFirstSurname(firstSurname);
+            for (Author author : authors) {
+                System.out.println(author.toString());
+            }
+        }
+
+    }
+
+    private static void listByFirstNameFirstSurnameOption() throws Exception {
+
+        try (Scanner scanner = new Scanner(System.in)) {
+
+            System.out.println("List of Authors By First Name and First Surname");
+            System.out.print("Write the first Name (for search): ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("Write the first Surname (for search): ");
+            String firstSurname = scanner.nextLine();
+
+            List<Author> authors = authorDao.getByFirstNameAndFirstSurname(firstName, firstSurname);
             for (Author author : authors) {
                 System.out.println(author.toString());
             }

@@ -33,12 +33,37 @@ public class AuthorDao extends GenericDao<Author>{
 
     }
 
-    public List<Author> getByFirstSurname(String surname){
-        return null;
+    public List<Author> getByFirstSurname(String firstSurname) throws Exception{
+        try {
+            SessionFactory sessionFactory = getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+
+            session.beginTransaction();
+            List<Author> authorList = session.createQuery("FROM Author a WHERE a.firstSurname = :firstSurname")
+                    .setParameter("firstSurname", firstSurname)
+                    .getResultList();
+            session.getTransaction().commit();
+            return authorList;
+        } catch (HibernateException e) {
+            throw new Exception(e);
+        }
     }
 
-    public List<Author> getByFirstNameAndFirstSurname(String firstName, String firstSurname){
-        return null;
+    public List<Author> getByFirstNameAndFirstSurname(String firstName, String firstSurname) throws Exception{
+        try {
+            SessionFactory sessionFactory = getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+
+            session.beginTransaction();
+            List<Author> authorList = session.createQuery("FROM Author a WHERE a.firstSurname = :firstSurname  AND a.firstName = :firstName")
+                    .setParameter("firstName", firstName)
+                    .setParameter("firstSurname", firstSurname)
+                    .getResultList();
+            session.getTransaction().commit();
+            return authorList;
+        } catch (HibernateException e) {
+            throw new Exception(e);
+        }
     }
 
     public boolean changeSecondSurname(String newSecondSurname, String oldSecondSurname) throws Exception{
@@ -47,7 +72,10 @@ public class AuthorDao extends GenericDao<Author>{
             Session session = sessionFactory.getCurrentSession();
 
             session.beginTransaction();
-            int n = session.createQuery("UPDATE Author a SET a.secondSurname = '" + newSecondSurname +"' WHERE a.secondSurname = '" + oldSecondSurname +"'").executeUpdate();
+            int n = session.createQuery("UPDATE Author a SET a.secondSurname = :newSecondSurname  WHERE a.secondSurname = :oldSecondSurname ")
+                    .setParameter("newSecondSurname", newSecondSurname)
+                    .setParameter("oldSecondSurname", oldSecondSurname)
+                    .executeUpdate();
             session.getTransaction().commit();
 
             return (n > 0);
@@ -62,7 +90,9 @@ public class AuthorDao extends GenericDao<Author>{
             Session session = sessionFactory.getCurrentSession();
 
             session.beginTransaction();
-            int n = session.createQuery("DELETE Author a WHERE a.firstName = '" + firstName +"'").executeUpdate();
+            int n = session.createQuery("DELETE Author a WHERE a.firstName = :firstName ")
+                    .setParameter("firstName", firstName)
+                    .executeUpdate();
             session.getTransaction().commit();
 
             return (n > 0);
