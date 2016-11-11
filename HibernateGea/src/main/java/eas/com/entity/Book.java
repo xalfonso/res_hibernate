@@ -7,7 +7,6 @@ public class Book {
     private long id;
     private String title;
     private Author author;
-    private Matter matter;
     private String publishing;
     private String edition;
     private String editor;
@@ -19,11 +18,23 @@ public class Book {
      * calc the code of the book
      */
     private void bookCode() {
-        this.code = new StringBuilder(this.matter.getCode())
-                .append(",")
-                .append(this.author.getFirstSurname().substring(0, 3).toUpperCase())
+        this.code = new StringBuilder(this.author.getFirstSurname().substring(0, 3).toUpperCase())
                 .append(",")
                 .append(this.title.charAt(0)).toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author=" + author +
+                ", publishing='" + publishing + '\'' +
+                ", edition='" + edition + '\'' +
+                ", editor='" + editor + '\'' +
+                ", pages=" + pages +
+                ", code='" + code + '\'' +
+                '}';
     }
 
 
@@ -51,14 +62,6 @@ public class Book {
 
     public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    public Matter getMatter() {
-        return matter;
-    }
-
-    public void setMatter(Matter matter) {
-        this.matter = matter;
     }
 
     public String getPublishing() {

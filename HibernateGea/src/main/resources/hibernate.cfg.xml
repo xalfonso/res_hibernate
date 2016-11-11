@@ -21,6 +21,7 @@
 
         <!-- mapping file, we can use Bean annotations too -->
         <mapping resource="author.hbm.xml" />
+        <mapping resource="book.hbm.xml" />
 
     </session-factory>
 </hibernate-configuration>

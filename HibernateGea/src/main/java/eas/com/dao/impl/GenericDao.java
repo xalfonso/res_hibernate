@@ -1,6 +1,7 @@
 package eas.com.dao.impl;
 
 import eas.com.dao.InterfaceDao;
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,6 +16,8 @@ abstract public class GenericDao<T> implements InterfaceDao<T>, AutoCloseable {
 
     private static SessionFactory sessionFactory;
     private Class<T> tClass;
+
+    private final static Logger LOGGER = Logger.getLogger(GenericDao.class.getName());
 
 
     public GenericDao(Class<T> tClass) {
@@ -121,7 +124,8 @@ abstract public class GenericDao<T> implements InterfaceDao<T>, AutoCloseable {
             Session session = sessionFactory.getCurrentSession();
 
             session.beginTransaction();
-            List<T> tList = session.createQuery("FROM " + this.tClass.getName()).list();
+            LOGGER.debug("Query: " + "FROM " + this.tClass.getName());
+            List<T> tList = session.createQuery("FROM " + this.tClass.getName()).getResultList();
             session.getTransaction().commit();
             return tList;
         } catch (HibernateException e) {

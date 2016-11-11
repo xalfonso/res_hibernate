@@ -1,7 +1,9 @@
 package eas.com;
 
 import eas.com.dao.impl.AuthorDao;
+import eas.com.dao.impl.BookDao;
 import eas.com.entity.Author;
+import eas.com.entity.Book;
 
 import java.util.List;
 import java.util.Scanner;
@@ -13,11 +15,13 @@ public class App {
 
 
     private static AuthorDao authorDao;
+    private static BookDao bookDao;
 
 
     public static void main(String[] args) {
 
         authorDao = new AuthorDao();
+        bookDao = new BookDao();
         try (Scanner scanner = new Scanner(System.in);) {
 
             String option = "";
@@ -32,6 +36,7 @@ public class App {
                 System.out.println("7. Change Surname");
                 System.out.println("8. Delete Author by First Name");
                 System.out.println("9. List of Author by First Name and First Surname");
+                System.out.println("10. List Of Books");
                 int menu = scanner.nextInt();
 
 
@@ -63,6 +68,9 @@ public class App {
                     case 9:
                         listByFirstNameFirstSurnameOption();
                         break;
+                    case 10:
+                        listBookOption();
+                        break;
                     default:
                         System.out.println("Option invalid");
                 }
@@ -80,6 +88,15 @@ public class App {
 
     }
 
+
+    private static void listBookOption() throws Exception {
+        System.out.println("List of Books");
+        List<Book> books = bookDao.getAll();
+        for (Book book : books) {
+            System.out.println(book.toString());
+        }
+
+    }
 
     private static void listOption() throws Exception {
         System.out.println("List of Authors");
